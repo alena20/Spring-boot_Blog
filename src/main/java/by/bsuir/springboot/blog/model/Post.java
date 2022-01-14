@@ -1,9 +1,7 @@
 package by.bsuir.springboot.blog.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Post {
@@ -15,6 +13,9 @@ public class Post {
     private String title, anons, full_text;
     private int views;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL,orphanRemoval = true)
+    private Set<Comment> comment;
+
     public Post() {
     }
 
@@ -23,6 +24,15 @@ public class Post {
         this.anons = anons;
         this.full_text = full_text;
     }
+
+/*
+    public Post(String title, String anons, String full_text, Comment comment) {
+        this.title = title;
+        this.anons = anons;
+        this.full_text = full_text;
+        this.comment = comment;
+    }
+*/
 
     public Long getId() {
         return id;
@@ -62,5 +72,20 @@ public class Post {
 
     public void setViews(int views) {
         this.views = views;
+    }
+
+    public void setComment(Set<Comment> comment) {
+        this.comment = comment;
+    }
+
+    public Set<Comment> getComments(){
+        return this.comment;
+    }
+    public void addComment(Comment comment){
+        this.comment.add(comment);
+    }
+
+    public void removeComment(Comment comment){
+        this.comment.remove(comment);
     }
 }
